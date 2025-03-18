@@ -17,7 +17,7 @@ export interface UseChat {
   sendMessage: (content: string) => void;
   isTyping: boolean;
   hasMedia: boolean;
-  currentMedia: Message | null;
+  mediaMessages: Message[];
   clearChat: () => void;
 }
 
@@ -52,11 +52,11 @@ const sampleResponses = [
 export function useChat(): UseChat {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [currentMedia, setCurrentMedia] = useState<Message | null>(null);
+  const [mediaMessages, setMediaMessages] = useState<Message[]>([]);
   const responseIndex = useRef(0);
 
   // Check if we have any media type messages
-  const hasMedia = currentMedia !== null;
+  const hasMedia = mediaMessages.length > 0;
 
   // Generate a new message ID
   const generateId = () => `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -97,12 +97,9 @@ export function useChat(): UseChat {
 
       setMessages(prev => [...prev, aiMessage]);
 
-      // Update current media if the message is a media type
+      // Update media messages if the message is a media type
       if (response.type !== 'text') {
-        setCurrentMedia(aiMessage);
-      } else {
-        // If we get a text response but already had media showing,
-        // we'll leave the media visible
+        setMediaMessages(prev => [...prev, aiMessage]);
       }
     }, 1500);
   }, []);
@@ -110,7 +107,7 @@ export function useChat(): UseChat {
   // Clear the chat
   const clearChat = useCallback(() => {
     setMessages([]);
-    setCurrentMedia(null);
+    setMediaMessages([]);
   }, []);
 
   return {
@@ -118,7 +115,7 @@ export function useChat(): UseChat {
     sendMessage,
     isTyping,
     hasMedia,
-    currentMedia,
+    mediaMessages,
     clearChat
   };
 }

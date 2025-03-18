@@ -8,7 +8,7 @@ import ChatHeader from './ChatHeader';
 import { cn } from '../lib/utils';
 
 const ChatInterface: React.FC = () => {
-  const { messages, sendMessage, isTyping, hasMedia, currentMedia, clearChat } = useChat();
+  const { messages, sendMessage, isTyping, hasMedia, mediaMessages, clearChat } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
@@ -18,7 +18,6 @@ const ChatInterface: React.FC = () => {
     }
   }, [messages]);
 
-  // Instead of using a welcome message, we'll just show the chat interface with the input field
   return (
     <div className="flex h-full bg-secondary/30">
       {/* Chat section */}
@@ -65,9 +64,9 @@ const ChatInterface: React.FC = () => {
       </div>
       
       {/* Media display section */}
-      {hasMedia && currentMedia && (
+      {hasMedia && (
         <div className="w-1/2 h-full animate-slide-in-right">
-          <ContentDisplay media={currentMedia} />
+          <ContentDisplay media={mediaMessages} />
         </div>
       )}
     </div>
