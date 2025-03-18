@@ -18,57 +18,7 @@ const ChatInterface: React.FC = () => {
     }
   }, [messages]);
 
-  // Return the welcome message with input field if the chat is empty
-  const renderWelcomeMessage = () => (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-        <h2 className="text-2xl font-semibold mb-2">Welcome to AI Chat</h2>
-        <p className="text-muted-foreground mb-6 max-w-lg">
-          Ask me anything! I can respond with text, images, videos, or interactive UI elements.
-        </p>
-        <div className="space-y-2 w-full max-w-md">
-          {['What is machine learning?', 'Show me a picture of a sunset', 'Create a calendar widget'].map((sample) => (
-            <button
-              key={sample}
-              onClick={() => sendMessage(sample)}
-              className="w-full p-3 bg-secondary hover:bg-secondary/80 rounded-xl text-left transition-colors"
-            >
-              {sample}
-            </button>
-          ))}
-        </div>
-      </div>
-      <SendMessageForm onSendMessage={sendMessage} isTyping={isTyping} />
-    </div>
-  );
-
-  // Render the actual chat interface with messages
-  const renderChat = () => (
-    <>
-      <div className="flex-1 overflow-y-auto px-4 py-6">
-        {messages.map((message) => (
-          <ChatMessage key={message.id} message={message} />
-        ))}
-        
-        {isTyping && (
-          <div className="flex items-start mb-4">
-            <div className="bg-secondary text-secondary-foreground rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '200ms' }} />
-                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '400ms' }} />
-              </div>
-            </div>
-          </div>
-        )}
-        
-        <div ref={messagesEndRef} />
-      </div>
-      
-      <SendMessageForm onSendMessage={sendMessage} isTyping={isTyping} />
-    </>
-  );
-
+  // Instead of using a welcome message, we'll just show the chat interface with the input field
   return (
     <div className="flex h-full bg-secondary/30">
       {/* Chat section */}
@@ -80,7 +30,38 @@ const ChatInterface: React.FC = () => {
       >
         <ChatHeader onClearChat={clearChat} hasMedia={hasMedia} />
         
-        {messages.length === 0 ? renderWelcomeMessage() : renderChat()}
+        <div className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto px-4 py-6">
+            {messages.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center text-center px-4">
+                <h2 className="text-2xl font-semibold mb-2">Welcome to AI Chat</h2>
+                <p className="text-muted-foreground mb-6 max-w-lg">
+                  Ask me anything! I can respond with text, images, videos, or interactive UI elements.
+                </p>
+              </div>
+            ) : (
+              messages.map((message) => (
+                <ChatMessage key={message.id} message={message} />
+              ))
+            )}
+            
+            {isTyping && (
+              <div className="flex items-start mb-4">
+                <div className="bg-secondary text-secondary-foreground rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '200ms' }} />
+                    <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '400ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesEndRef} />
+          </div>
+          
+          <SendMessageForm onSendMessage={sendMessage} isTyping={isTyping} />
+        </div>
       </div>
       
       {/* Media display section */}
