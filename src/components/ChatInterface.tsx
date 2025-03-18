@@ -18,24 +18,27 @@ const ChatInterface: React.FC = () => {
     }
   }, [messages]);
 
-  // Return the welcome message if the chat is empty
+  // Return the welcome message with input field if the chat is empty
   const renderWelcomeMessage = () => (
-    <div className="flex flex-col items-center justify-center h-full text-center px-4">
-      <h2 className="text-2xl font-semibold mb-2">Welcome to AI Chat</h2>
-      <p className="text-muted-foreground mb-6 max-w-lg">
-        Ask me anything! I can respond with text, images, videos, or interactive UI elements.
-      </p>
-      <div className="space-y-2 w-full max-w-md">
-        {['What is machine learning?', 'Show me a picture of a sunset', 'Create a calendar widget'].map((sample) => (
-          <button
-            key={sample}
-            onClick={() => sendMessage(sample)}
-            className="w-full p-3 bg-secondary hover:bg-secondary/80 rounded-xl text-left transition-colors"
-          >
-            {sample}
-          </button>
-        ))}
+    <div className="flex flex-col h-full">
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
+        <h2 className="text-2xl font-semibold mb-2">Welcome to AI Chat</h2>
+        <p className="text-muted-foreground mb-6 max-w-lg">
+          Ask me anything! I can respond with text, images, videos, or interactive UI elements.
+        </p>
+        <div className="space-y-2 w-full max-w-md">
+          {['What is machine learning?', 'Show me a picture of a sunset', 'Create a calendar widget'].map((sample) => (
+            <button
+              key={sample}
+              onClick={() => sendMessage(sample)}
+              className="w-full p-3 bg-secondary hover:bg-secondary/80 rounded-xl text-left transition-colors"
+            >
+              {sample}
+            </button>
+          ))}
+        </div>
       </div>
+      <SendMessageForm onSendMessage={sendMessage} isTyping={isTyping} />
     </div>
   );
 
