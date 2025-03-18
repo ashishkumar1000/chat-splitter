@@ -29,7 +29,7 @@ const sampleResponses = [
   },
   {
     type: 'image',
-    content: "https://images.unsplash.com/photo-1682687220923-c58b9a4592ea?q=80&w=2787&auto=format&fit=crop"
+    content: "https://bit.ly/41yXu8O"
   },
   {
     type: 'text',

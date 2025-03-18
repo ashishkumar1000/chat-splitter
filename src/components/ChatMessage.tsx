@@ -29,12 +29,18 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       );
     }
     
-    // For media messages, we'll show a placeholder in the chat stream
     if (message.type === 'image') {
       return (
-        <div className="text-sm flex items-center space-x-2 text-primary">
-          <span>📷</span>
-          <span>Sent an image (view on the right)</span>
+        <div className="flex flex-col gap-2">
+          <img 
+            src={message.content} 
+            alt="AI generated image" 
+            className="max-w-full rounded-md object-cover"
+            style={{ maxHeight: '200px' }}
+          />
+          <div className="text-xs text-primary">
+            <span>Image also visible in detail view →</span>
+          </div>
         </div>
       );
     }
