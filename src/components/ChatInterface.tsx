@@ -1,15 +1,17 @@
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useChat } from '../hooks/useChat';
 import ChatMessage from './ChatMessage';
 import SendMessageForm from './SendMessageForm';
 import ContentDisplay from './ContentDisplay';
 import ChatHeader from './ChatHeader';
 import { cn } from '../lib/utils';
+import { Switch } from './ui/switch';
 
 const ChatInterface: React.FC = () => {
   const { messages, sendMessage, isTyping, hasMedia, mediaMessages, clearChat } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [splitViewEnabled, setSplitViewEnabled] = useState(true);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -18,16 +20,35 @@ const ChatInterface: React.FC = () => {
     }
   }, [messages]);
 
+  // Function to toggle split view
+  const toggleSplitView = () => {
+    setSplitViewEnabled(!splitViewEnabled);
+  };
+
+  // Determine if we should show media in the main chat
+  const showMediaInChat = !splitViewEnabled && hasMedia;
+
   return (
     <div className="flex h-full bg-secondary/30">
       {/* Chat section */}
       <div 
         className={cn(
           "flex flex-col h-full transition-all duration-500 ease-in-out",
-          hasMedia ? "w-1/2" : "w-full"
+          splitViewEnabled && hasMedia ? "w-1/2" : "w-full"
         )}
       >
-        <ChatHeader onClearChat={clearChat} hasMedia={hasMedia} />
+        <div className="flex items-center justify-between px-4 py-2 bg-white/50 backdrop-blur-sm border-b border-border">
+          <ChatHeader onClearChat={clearChat} hasMedia={hasMedia} />
+          
+          {/* Split view toggle */}
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-muted-foreground">Split View</span>
+            <Switch 
+              checked={splitViewEnabled}
+              onCheckedChange={toggleSplitView}
+            />
+          </div>
+        </div>
         
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto px-4 py-6">
@@ -39,9 +60,15 @@ const ChatInterface: React.FC = () => {
                 </p>
               </div>
             ) : (
-              messages.map((message) => (
-                <ChatMessage key={message.id} message={message} />
-              ))
+              <>
+                {messages.map((message) => (
+                  <ChatMessage 
+                    key={message.id} 
+                    message={message} 
+                    showMedia={showMediaInChat}
+                  />
+                ))}
+              </>
             )}
             
             {isTyping && (
@@ -63,8 +90,8 @@ const ChatInterface: React.FC = () => {
         </div>
       </div>
       
-      {/* Media display section */}
-      {hasMedia && (
+      {/* Media display section - only shown when split view is enabled */}
+      {splitViewEnabled && hasMedia && (
         <div className="w-1/2 h-full animate-slide-in-right">
           <ContentDisplay media={mediaMessages} />
         </div>

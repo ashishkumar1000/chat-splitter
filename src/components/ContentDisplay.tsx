@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Message } from '../hooks/useChat';
 import { cn } from '../lib/utils';
 
@@ -8,6 +8,15 @@ interface ContentDisplayProps {
 }
 
 const ContentDisplay: React.FC<ContentDisplayProps> = ({ media }) => {
+  const contentEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when new media is added
+  useEffect(() => {
+    if (contentEndRef.current) {
+      contentEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [media]);
+
   const renderMediaItem = (item: Message) => {
     switch (item.type) {
       case 'image':
@@ -79,6 +88,7 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ media }) => {
               {renderMediaItem(item)}
             </div>
           ))}
+          <div ref={contentEndRef} />
         </div>
       )}
     </div>

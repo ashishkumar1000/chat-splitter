@@ -5,9 +5,10 @@ import { cn } from '../lib/utils';
 
 interface ChatMessageProps {
   message: Message;
+  showMedia?: boolean;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
+const ChatMessage: React.FC<ChatMessageProps> = ({ message, showMedia = false }) => {
   const isUser = message.sender === 'user';
 
   // Format the message timestamp
@@ -29,31 +30,81 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       );
     }
     
-    if (message.type === 'image') {
-      return (
-        <div className="text-sm flex items-center space-x-2 text-primary">
-          <span>📷</span>
-          <span>Sent an image (view on the right)</span>
-        </div>
-      );
-    }
-    
-    if (message.type === 'video') {
-      return (
-        <div className="text-sm flex items-center space-x-2 text-primary">
-          <span>🎥</span>
-          <span>Sent a video (view on the right)</span>
-        </div>
-      );
-    }
-    
-    if (message.type === 'ui') {
-      return (
-        <div className="text-sm flex items-center space-x-2 text-primary">
-          <span>🖼️</span>
-          <span>Sent a UI element (view on the right)</span>
-        </div>
-      );
+    // If showMedia is true and the message is a media type, render the media
+    if (showMedia) {
+      if (message.type === 'image') {
+        return (
+          <div className="my-2">
+            <img 
+              src={message.content} 
+              alt="AI generated image" 
+              className="max-w-full rounded-lg shadow-md" 
+            />
+          </div>
+        );
+      }
+      
+      if (message.type === 'video') {
+        return (
+          <div className="my-2">
+            <video 
+              src={message.content} 
+              controls 
+              className="max-w-full rounded-lg shadow-md" 
+            />
+          </div>
+        );
+      }
+      
+      if (message.type === 'ui') {
+        return (
+          <div className="my-2">
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <h3 className="text-lg font-medium mb-2">Calendar Widget</h3>
+              <div className="grid grid-cols-7 gap-1">
+                {Array.from({ length: 31 }, (_, i) => (
+                  <div 
+                    key={i} 
+                    className={`h-8 flex items-center justify-center rounded-md text-sm ${
+                      i === 14 ? 'bg-primary text-white' : 'hover:bg-secondary'
+                    } cursor-pointer transition-colors`}
+                  >
+                    {i + 1}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+    } else {
+      // If showMedia is false, show placeholder for media types
+      if (message.type === 'image') {
+        return (
+          <div className="text-sm flex items-center space-x-2 text-primary">
+            <span>📷</span>
+            <span>Sent an image (view on the right)</span>
+          </div>
+        );
+      }
+      
+      if (message.type === 'video') {
+        return (
+          <div className="text-sm flex items-center space-x-2 text-primary">
+            <span>🎥</span>
+            <span>Sent a video (view on the right)</span>
+          </div>
+        );
+      }
+      
+      if (message.type === 'ui') {
+        return (
+          <div className="text-sm flex items-center space-x-2 text-primary">
+            <span>🖼️</span>
+            <span>Sent a UI element (view on the right)</span>
+          </div>
+        );
+      }
     }
     
     return <div>Unsupported message type</div>;
