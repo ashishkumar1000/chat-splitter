@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Message } from '../hooks/useChat';
 import { cn } from '../lib/utils';
+import HotelListingView from './HotelListingView';
 
 interface ContentDisplayProps {
   media: Message[];
@@ -60,6 +61,13 @@ const ContentDisplay: React.FC<ContentDisplayProps> = ({ media }) => {
                 ))}
               </div>
             </div>
+          </div>
+        );
+        
+      case 'hotel-listing':
+        return (
+          <div className="w-full p-4">
+            <HotelListingView />
           </div>
         );
         

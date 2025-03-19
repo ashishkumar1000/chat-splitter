@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 
 // Types for our messages
-export type MessageType = 'text' | 'image' | 'video' | 'ui';
+export type MessageType = 'text' | 'image' | 'video' | 'ui' | 'hotel-listing';
 
 export interface Message {
   id: string;
@@ -76,7 +76,35 @@ export function useChat(): UseChat {
 
     setMessages(prev => [...prev, userMessage]);
 
-    // Simulate AI typing
+    // Check if the message is asking for hotel listings
+    const lowerContent = content.toLowerCase();
+    if (lowerContent.includes('hotel') || 
+        lowerContent.includes('listing') || 
+        lowerContent.includes('stay') || 
+        lowerContent.includes('accommodation')) {
+      
+      // Simulate AI typing
+      setIsTyping(true);
+      
+      setTimeout(() => {
+        setIsTyping(false);
+        
+        const hotelListingMessage: Message = {
+          id: generateId(),
+          content: "hotel-listing-view",
+          sender: 'ai',
+          type: 'hotel-listing',
+          timestamp: new Date()
+        };
+        
+        setMessages(prev => [...prev, hotelListingMessage]);
+        setMediaMessages(prev => [...prev, hotelListingMessage]);
+      }, 1000);
+      
+      return;
+    }
+
+    // Simulate AI typing for regular responses
     setIsTyping(true);
 
     // Get a sample response based on the current index

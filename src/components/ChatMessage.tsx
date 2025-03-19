@@ -2,6 +2,7 @@
 import React from 'react';
 import { Message } from '../hooks/useChat';
 import { cn } from '../lib/utils';
+import HotelListingView from './HotelListingView';
 
 interface ChatMessageProps {
   message: Message;
@@ -26,6 +27,15 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, showMedia = false })
       return (
         <div className="text-sm sm:text-base leading-relaxed whitespace-pre-line">
           {message.content}
+        </div>
+      );
+    }
+    
+    // Handle hotel listing view
+    if (message.type === 'hotel-listing') {
+      return (
+        <div className="my-2 w-full">
+          <HotelListingView />
         </div>
       );
     }
@@ -105,6 +115,15 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, showMedia = false })
           </div>
         );
       }
+      
+      if (message.type === 'hotel-listing') {
+        return (
+          <div className="text-sm flex items-center space-x-2 text-primary">
+            <span>🏨</span>
+            <span>Sent hotel listings (view on the right)</span>
+          </div>
+        );
+      }
     }
     
     return <div>Unsupported message type</div>;
@@ -122,7 +141,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, showMedia = false })
           "max-w-[80%] px-4 py-3 rounded-2xl shadow-sm",
           isUser
             ? "bg-primary text-primary-foreground rounded-tr-none"
-            : "bg-secondary text-secondary-foreground rounded-tl-none"
+            : "bg-secondary text-secondary-foreground rounded-tl-none",
+          message.type === 'hotel-listing' ? "max-w-full w-full" : ""
         )}
       >
         {renderContent()}
