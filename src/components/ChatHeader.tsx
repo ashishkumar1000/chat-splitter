@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Trash2 } from 'lucide-react';
+import { Button } from './ui/button';
 
 interface ChatHeaderProps {
   onClearChat: () => void;
@@ -14,13 +15,16 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ onClearChat, hasMedia }) => {
         <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse-soft"></div>
         <h1 className="font-medium">{hasMedia ? 'Chat & Media View' : 'AI Chat'}</h1>
       </div>
-      <button
+      <Button
         onClick={onClearChat}
-        className="p-2 text-muted-foreground hover:text-destructive transition-colors rounded-md"
+        variant="outline"
+        size="sm"
+        className="flex items-center gap-2 text-muted-foreground hover:text-destructive hover:border-destructive/50 transition-colors"
         title="Clear chat"
       >
-        <Trash2 size={18} />
-      </button>
+        <Trash2 size={16} />
+        <span>Clear Chat</span>
+      </Button>
     </div>
   );
 };
