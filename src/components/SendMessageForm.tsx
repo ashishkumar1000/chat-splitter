@@ -22,11 +22,25 @@ const SendMessageForm: React.FC<SendMessageFormProps> = ({
     }
   }, [message]);
 
+  // Focus on the textarea when the component mounts and after submitting
+  useEffect(() => {
+    if (textareaRef.current && !isTyping) {
+      textareaRef.current.focus();
+    }
+  }, [isTyping]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !isTyping) {
       onSendMessage(message);
       setMessage('');
+      
+      // Set a small timeout to ensure the textarea gets focus after state updates
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+        }
+      }, 10);
     }
   };
 
