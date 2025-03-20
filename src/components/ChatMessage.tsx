@@ -31,11 +31,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, showMedia = false })
       );
     }
     
-    // Handle hotel listing view
+    // Handle hotel listing view - only show in media section
     if (message.type === 'hotel-listing') {
+      // Always show a placeholder for hotel listings in the chat view
       return (
-        <div className="my-2 w-full">
-          <HotelListingView />
+        <div className="text-sm flex items-center space-x-2 text-primary">
+          <span>🏨</span>
+          <span>Sent hotel listings (view on the right)</span>
         </div>
       );
     }
@@ -115,15 +117,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, showMedia = false })
           </div>
         );
       }
-      
-      if (message.type === 'hotel-listing') {
-        return (
-          <div className="text-sm flex items-center space-x-2 text-primary">
-            <span>🏨</span>
-            <span>Sent hotel listings (view on the right)</span>
-          </div>
-        );
-      }
     }
     
     return <div>Unsupported message type</div>;
@@ -141,8 +134,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, showMedia = false })
           "max-w-[80%] px-4 py-3 rounded-2xl shadow-sm",
           isUser
             ? "bg-primary text-primary-foreground rounded-tr-none"
-            : "bg-secondary text-secondary-foreground rounded-tl-none",
-          message.type === 'hotel-listing' ? "max-w-full w-full" : ""
+            : "bg-secondary text-secondary-foreground rounded-tl-none"
         )}
       >
         {renderContent()}
