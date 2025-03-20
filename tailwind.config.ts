@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -110,8 +109,8 @@ export default {
 					'100%': { width: '100%' }
 				},
 				'pulse-soft': {
-					'0%, 100%': { opacity: '1' },
-					'50%': { opacity: '0.8' }
+					'0%, 100%': { opacity: '1', transform: 'scale(1)' },
+					'50%': { opacity: '0.6', transform: 'scale(0.9)' }
 				}
 			},
 			animation: {

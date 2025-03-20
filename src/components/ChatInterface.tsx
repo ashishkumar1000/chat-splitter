@@ -37,21 +37,21 @@ const ChatInterface: React.FC = () => {
           splitViewEnabled && hasMedia ? "w-1/2" : "w-full"
         )}
       >
-        <div className="flex items-center justify-between px-4 py-2 bg-white/50 backdrop-blur-sm border-b border-border">
-          <ChatHeader onClearChat={clearChat} hasMedia={hasMedia} />
-          
-          {/* Split view toggle */}
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-muted-foreground">Split View</span>
-            <Switch 
-              checked={splitViewEnabled}
-              onCheckedChange={toggleSplitView}
-            />
-          </div>
-        </div>
+        <ChatHeader onClearChat={clearChat} hasMedia={hasMedia} />
         
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto px-4 py-6">
+            {/* Split view toggle */}
+            {hasMedia && (
+              <div className="flex items-center justify-end mb-4 space-x-2 px-2">
+                <span className="text-sm text-muted-foreground">Split View</span>
+                <Switch 
+                  checked={splitViewEnabled}
+                  onCheckedChange={toggleSplitView}
+                />
+              </div>
+            )}
+            
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center px-4">
                 <h2 className="text-2xl font-semibold mb-2">Welcome to AI Chat</h2>
